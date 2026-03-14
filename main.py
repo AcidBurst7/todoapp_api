@@ -1,70 +1,11 @@
-from datetime import datetime
-from typing import Annotated
-
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 import uvicorn
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    create_async_engine,
-    async_sessionmaker
-)
 
-from models.base import Base
-from models.task import Task
-from schemas.task import TaskSchema
+from api import main_router
 
 app = FastAPI()
-engine = create_async_engine('sqlite+aiosqlite:///todoapp.db')
-session_db = async_sessionmaker(engine, expire_on_commit=False)
+app.include_router(main_router)
 
-
-async def get_session():
-    async with session_db() as session:
-        yield session
-
-SessionDep = Annotated[AsyncSession, Depends(get_session)]
-
-
-@app.get("/", summary="Главная страница", tags=["Главная"])
-async def home(session: SessionDep):
-    query = select(Task)
-    tasks = await session.execute(query)
-    return tasks.scalars().all()
-
-@app.post("/tasks", summary="Добавление задачи", tags=["Действия с задачами"])
-async def create_task(task: TaskSchema, session: SessionDep):
-    task = Task(text=task.text)
-    session.add(task)
-    await session.commit()
-    
-    return {"success": True, "message": "Задача успешно добавлена"}
-
-@app.put("/tasks", summary="Изменение задачи", tags=["Действия с задачами"])
-async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep):
-    task = await session.get(Task, task_id)  
-    if task:  
-        task.text = task_schema.text  
-        await session.commit()  
-
-    return {"success": True, "message": "Задача успешно изменена"}
-
-@app.delete("/{task_id}", summary="Удаление задачи", tags=["Действия с задачами"])
-async def delete_task(task_id: int, session: SessionDep):
-    task = await session.get(Task, task_id) 
-    try: 
-        if task:  
-            await session.delete(task)
-        await session.commit()
-        return {"success": True}
-    except Exception:  
-        return {"success": False}
-
-@app.post("/setup_database")
-async def setup_database():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="0.0.0.0", port=8000)

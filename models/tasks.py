@@ -4,7 +4,7 @@ from sqlalchemy.orm import (
     mapped_column
 )
 
-from models.base import Base
+from database import Base
 
 class Task(Base):
     __tablename__ = "tasks"
