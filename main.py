@@ -38,7 +38,7 @@ async def create_task(task: TaskSchema, session: SessionDep):
     session.add(task)
     await session.commit()
     
-    return {"success": True, "message": "Книга успешно добавлена"}
+    return {"success": True, "message": "Задача успешно добавлена"}
 
 @app.put("/tasks", summary="Изменение задачи", tags=["Действия с задачами"])
 async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep):
@@ -47,7 +47,7 @@ async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep
         task.text = task_schema.text  
         await session.commit()  
 
-    return {"success": True, "message": "Книга успешно изменена"}
+    return {"success": True, "message": "Задача успешно изменена"}
 
 @app.delete("/{task_id}", summary="Удаление задачи", tags=["Действия с задачами"])
 async def delete_task(task_id: int, session: SessionDep):
