@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated
 
 from fastapi import FastAPI, Depends
-# import uvicorn
+import uvicorn
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -66,5 +66,5 @@ async def setup_database():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
-# if __name__ == '__main__':
-#     uvicorn.run("main:app", reload=True)
+if __name__ == '__main__':
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
