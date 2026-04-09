@@ -20,7 +20,6 @@ router = APIRouter()
 # def login():
 #     ...
 
-
 @router.get("/tasks", summary="Список задач", tags=["Действия с задачами"])
 async def list_tasks(session: SessionDep):
     query = select(Task)
@@ -29,7 +28,7 @@ async def list_tasks(session: SessionDep):
 
 @router.post("/tasks", summary="Добавление задачи", tags=["Действия с задачами"])
 async def create_task(task: TaskSchema, session: SessionDep):
-    task = Task(text=task.text)
+    task = Task(text=task.text, done=task.done)
     session.add(task)
     await session.commit()
     
@@ -39,7 +38,8 @@ async def create_task(task: TaskSchema, session: SessionDep):
 async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep):
     task = await session.get(Task, task_id)  
     if task:  
-        task.text = task_schema.text  
+        task.text = task_schema.text
+        task.done = task_schema.done  
         await session.commit()  
 
     return {"success": True, "message": "Задача успешно изменена"}

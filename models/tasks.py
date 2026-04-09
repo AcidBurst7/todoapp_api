@@ -11,6 +11,7 @@ class Task(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str]
+    done: Mapped[bool] = mapped_column(default=False)
     date_create: Mapped[datetime] = mapped_column(
         default=datetime.now()
     )

@@ -7,5 +7,6 @@ from pydantic import (
 
 class TaskSchema(BaseModel):
     text: str = Field(max_length=1000)
+    done: bool
 
     model_config = ConfigDict(extra='forbid')
