@@ -21,7 +21,7 @@ def login():
     ...
 
 
-@router.get("/", summary="Главная страница", tags=["Главная"])
+@router.get("/tasks", summary="Список задач", tags=["Действия с задачами"])
 async def home(session: SessionDep):
     query = select(Task)
     tasks = await session.execute(query)
