@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from sqlalchemy import select
+from authx import AuthX, AuthXConfig
 
 from database import engine, Base
 
@@ -8,6 +9,17 @@ from models.tasks import Task
 from schemas.tasks import TaskSchema
 
 router = APIRouter()
+
+config = AuthXConfig()
+config.JWT_SECRET_KEY = "SECRET_KEY"
+config.JWT_ACCESS_COOKIE_NAME = "my_access_token"
+config.JWT_TOKEN_LOCATION = ["cookies"]
+
+
+@router.post("/login")
+def login():
+    ...
+
 
 @router.get("/", summary="Главная страница", tags=["Главная"])
 async def home(session: SessionDep):

@@ -14,3 +14,6 @@ class Task(Base):
     date_create: Mapped[datetime] = mapped_column(
         default=datetime.now()
     )
+    date_end: Mapped[datetime] = mapped_column(
+        default=datetime.now()
+    )
