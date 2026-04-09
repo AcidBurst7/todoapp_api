@@ -10,19 +10,19 @@ from schemas.tasks import TaskSchema
 
 router = APIRouter()
 
-config = AuthXConfig()
-config.JWT_SECRET_KEY = "SECRET_KEY"
-config.JWT_ACCESS_COOKIE_NAME = "my_access_token"
-config.JWT_TOKEN_LOCATION = ["cookies"]
+# config = AuthXConfig()
+# config.JWT_SECRET_KEY = "SECRET_KEY"
+# config.JWT_ACCESS_COOKIE_NAME = "my_access_token"
+# config.JWT_TOKEN_LOCATION = ["cookies"]
 
 
-@router.post("/login")
-def login():
-    ...
+# @router.post("/login")
+# def login():
+#     ...
 
 
 @router.get("/tasks", summary="Список задач", tags=["Действия с задачами"])
-async def home(session: SessionDep):
+async def list_tasks(session: SessionDep):
     query = select(Task)
     tasks = await session.execute(query)
     return tasks.scalars().all()
