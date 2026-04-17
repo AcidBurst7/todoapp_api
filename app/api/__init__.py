@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from api.tasks import router as tasks_router
+from app.api.tasks import router as tasks_router
 
 main_router = APIRouter()
 

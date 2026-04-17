@@ -4,9 +4,9 @@ from authx import AuthX, AuthXConfig
 
 from database import engine, Base
 
-from api.dependencies import SessionDep
-from models.tasks import Task
-from schemas.tasks import TaskSchema
+from app.api.dependencies import SessionDep
+from app.models.tasks import Task
+from app.schemas.tasks import TaskSchema
 
 router = APIRouter()
 
