@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from sqlalchemy import select
-from authx import AuthX, AuthXConfig
 
 from database import engine, Base
 
@@ -9,16 +8,6 @@ from app.models.tasks import Task
 from app.schemas.tasks import TaskSchema
 
 router = APIRouter()
-
-# config = AuthXConfig()
-# config.JWT_SECRET_KEY = "SECRET_KEY"
-# config.JWT_ACCESS_COOKIE_NAME = "my_access_token"
-# config.JWT_TOKEN_LOCATION = ["cookies"]
-
-
-# @router.post("/login")
-# def login():
-#     ...
 
 @router.get("/tasks", summary="Список задач", tags=["Действия с задачами"])
 async def list_tasks(session: SessionDep):
@@ -34,7 +23,7 @@ async def create_task(task: TaskSchema, session: SessionDep):
     
     return {"success": True, "message": "Задача успешно добавлена"}
 
-@router.put("/tasks", summary="Изменение задачи", tags=["Действия с задачами"])
+@router.put("/tasks/{task_id}", summary="Изменение задачи", tags=["Действия с задачами"])
 async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep):
     task = await session.get(Task, task_id)  
     if task:  
@@ -44,7 +33,7 @@ async def update_task(task_id: int, task_schema: TaskSchema, session: SessionDep
 
     return {"success": True, "message": "Задача успешно изменена"}
 
-@router.delete("/{task_id}", summary="Удаление задачи", tags=["Действия с задачами"])
+@router.delete("/tasks/{task_id}", summary="Удаление задачи", tags=["Действия с задачами"])
 async def delete_task(task_id: int, session: SessionDep):
     task = await session.get(Task, task_id) 
     try: 
